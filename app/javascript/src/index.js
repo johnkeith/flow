@@ -1,14 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import ReactDOM from 'react-dom'
+import axios from 'axios'
 
 class HelloAPI extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {}
   }
 
   componentWillMount() {
     console.log('About to mount component')
+    axios.get('/api/v1/test')
+      .then((response) => {
+        this.setState({
+          nameFromAPI: response.data.name
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   render() {
