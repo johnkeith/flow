@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
+import style from './style.sass'
 
 export default class HelloAPI extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ export default class HelloAPI extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={style['test']}>
         <h1>Hello, { this.state.nameFromAPI }</h1>
       </div>
     );
