@@ -25,7 +25,7 @@ export default class HelloAPI extends React.Component {
   render() {
     return (
       <div className={style['test']}>
-        <h1>Hello, { this.state.nameFromAPI }</h1>
+        <h1 className="is-size-1">Hello, { this.state.nameFromAPI }</h1>
       </div>
     );
   }
