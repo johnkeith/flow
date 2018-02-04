@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
 import style from './style.sass'
+// import GraphImage from './graph_image.svg'
 
 export default class HelloAPI extends React.Component {
   constructor(props) {
