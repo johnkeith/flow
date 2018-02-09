@@ -6,6 +6,6 @@ class CreateAdmin < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
-    add_foreign_key :amdins, :accounts
+    add_foreign_key :admins, :accounts
   end
 end
