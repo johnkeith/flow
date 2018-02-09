@@ -8,4 +8,5 @@
 // layout file, like app/views/layouts/application.html.erb
 
 import '../src/index'
+import 'bulma/css/bulma.css'
 import '../src/styles/index.scss'
