@@ -1,7 +1,4 @@
 class Api::V1::AdminsController < ApplicationController
-  def new
-    @admin = Admin.new
-  end
 
   def index
     @admin = Admin.all
@@ -20,9 +17,6 @@ class Api::V1::AdminsController < ApplicationController
     end
   end
 
-  def edit
-    @admin = Admin.find params[:id]
-  end
 
   def update
     @admin = Admin.find params[:id]
