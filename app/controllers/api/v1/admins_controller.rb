@@ -1,5 +1,5 @@
 class Api::V1::AdminsController < ApplicationController
-  before_action :set_admin, only [:show, :uptdate, :destroy]
+  before_action :set_admin, only: [:show, :uptdate, :destroy]
 
   def index
     @admin = Admin.all
