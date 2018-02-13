@@ -12,7 +12,7 @@ class AdminsController < ApplicationController
   end
 
   def create
-    @admin = Admin.new params[:admin]
+    @admin = Admin.new params(admin_params)
     if @admin.save
       redirect_to admins_path
     else
@@ -37,6 +37,12 @@ class AdminsController < ApplicationController
     @admin = Admin.find params[:id]
     @admin.destroy
     redirect_to admins_path
+  end
+
+  private
+
+  def admin_params
+    params.require(:admin).permit(:name, :account_id)
   end
 
 end
