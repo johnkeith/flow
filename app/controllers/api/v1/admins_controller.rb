@@ -3,16 +3,16 @@ class Api::V1::AdminsController < ApplicationController
 
   def index
     @admin = Admin.all
-    json_response (@admin)
+    render json: @admin
   end
 
   def show
-    json_response(@admin)
+    render json: @admin
   end
 
   def create
     @admin = Admin.create!(admin_params)
-    json_response(@admin)
+    render json: @admin
   end
 
 
