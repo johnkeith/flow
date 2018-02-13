@@ -17,13 +17,19 @@ class Api::V1::AdminsController < ApplicationController
 
 
   def update
-    @admin.update(admin_params)
-    head :no_content
+    if @admin.update_attributes(admin_params)
+      render json: @admin, status: :ok
+    else
+      render json: @admin.errors, status: :unprocessable_entity
+    end
   end
 
   def destroy
-    @admin.destroy
-    head :no_content
+    if @admin.destroy
+      render json: :no_content, status: :no_content
+    else
+      render json: @admin.errors, status: :unprocessable_entity
+    end 
   end
 
   private
