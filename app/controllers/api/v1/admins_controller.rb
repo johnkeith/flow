@@ -3,35 +3,27 @@ class Api::V1::AdminsController < ApplicationController
 
   def index
     @admin = Admin.all
+    json_response (@admin)
   end
 
   def show
-    @admin = Admin.find params[:id]
+    json_response(@admin)
   end
 
   def create
-    @admin = Admin.new params(admin_params)
-    if @admin.save
-      redirect_to admins_path
-    else
-      render :action => 'new'
-    end
+    @admin = Admin.create!(admin_params)
+    json_response(@admin)
   end
 
 
   def update
-    @admin = Admin.find params[:id]
-    if @admin.update_attributes params[:id]
-      redirect_to admins_path
-    else
-      render :action => :edit
-    end
+    @admin.update(admin_params)
+    head :no_content
   end
 
   def destroy
-    @admin = Admin.find params[:id]
     @admin.destroy
-    redirect_to admins_path
+    head :no_content
   end
 
   private
