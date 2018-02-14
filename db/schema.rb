@@ -17,28 +17,46 @@ ActiveRecord::Schema.define(version: 20180209165445) do
 
   create_table "accounts", force: :cascade do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "admins", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
+    t.integer "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "survey_responses", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "survey_id", null: false
     t.integer "team_member_id", null: false
     t.integer "account_id", null: false
   end
 
   create_table "surveys", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
+    t.integer "account_id", null: false
+    t.integer "admin_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "team_members", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
+    t.integer "account_id", null: false
+    t.integer "team_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "teams", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
+    t.integer "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
