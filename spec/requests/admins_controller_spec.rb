@@ -1,3 +1,4 @@
+require 'rails_helper'
 
 RSpec.describe Api::V1::AdminsController, type: :controller do
   describe 'GET #index' do
@@ -7,10 +8,19 @@ RSpec.describe Api::V1::AdminsController, type: :controller do
   end
 
   it "returns all the admins" do
-   admin = FactoryBot.create_list(:admin, 10)
-   get :index, format: :json
+   FactoryBot.create_list(:admin, 10)
+   get :index
       json = JSON.parse(response.body)
       expect(json.length).to eql(10)
     end
   end
+
+  describe 'GET #show' do
+    it 'returns successfully' do
+      FactoryBot.create(:admin, id: 1)
+      get :show, params: {id: 1}
+      expect(response.status).to eq 200
+    end
+  end
+
 end
