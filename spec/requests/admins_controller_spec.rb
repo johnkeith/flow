@@ -25,10 +25,11 @@ RSpec.describe Api::V1::AdminsController, type: :controller do
   end
 
   describe 'POST #create' do
-    FactoryBot.create(:account, id: 1)
     context 'admin is created' do
       it 'returns successfully' do
-        post :create, params: { name: 'fake name', account_id: 1 }
+        random_id = rand(1000)
+        FactoryBot.create(:account, id: random_id)
+        post :create, params: { name: 'fake name', account_id: random_id }
         expect(response.status).to eq 200
       end
     end
