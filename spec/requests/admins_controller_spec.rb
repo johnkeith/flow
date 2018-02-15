@@ -27,15 +27,18 @@ RSpec.describe Api::V1::AdminsController, type: :controller do
   describe 'POST #create' do
     context 'admin is created' do
       it 'returns successfully' do
-        random_id = rand(1000)
-        FactoryBot.create(:account, id: random_id)
-        post :create, params: { name: 'fake name', account_id: random_id }
-        expect(response.status).to eq 200
+        FactoryBot.create(:account)
+        post :create, params: FactoryBot.attributes_for(:admin, :account_id => Account.first.id)
+        expect(response).to have_http_status(:ok)
       end
     end
-    context 'admin is not created' do
 
+    context 'admin is not created' do
+      it 'raises an ActiveRecord error' do
+        expect {
+          post :create, params: FactoryBot.attributes_for(:admin)
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
     end
   end
-
 end
