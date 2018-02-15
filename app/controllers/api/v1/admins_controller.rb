@@ -29,13 +29,13 @@ class Api::V1::AdminsController < ApplicationController
       render json: :no_content, status: :no_content
     else
       render json: @admin.errors, status: :unprocessable_entity
-    end 
+    end
   end
 
   private
 
   def admin_params
-    params.require(:admin).permit(:name, :account_id)
+    params.permit(:name, :account_id)
   end
 
   def set_admin
