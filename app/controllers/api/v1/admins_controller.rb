@@ -1,5 +1,6 @@
 class Api::V1::AdminsController < ApplicationController
   before_action :set_admin, only: [:show, :uptdate, :destroy]
+  protect_from_forgery with: :null_session
 
   def index
     @admin = Admin.all
