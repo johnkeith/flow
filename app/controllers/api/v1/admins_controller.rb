@@ -12,8 +12,13 @@ class Api::V1::AdminsController < ApplicationController
   end
 
   def create
-    @admin = Admin.create!(admin_params)
-    render json: @admin
+    @admin = Admin.new(admin_params)
+
+    if @admin.save
+      render json: @admin
+    else
+      render json: @admin.errors, status: :unprocessable_entity 
+    end
   end
 
 
@@ -36,7 +41,7 @@ class Api::V1::AdminsController < ApplicationController
   private
 
   def admin_params
-    params.permit(:name, :account_id)
+    params.require(:admin).permit(:name, :account_id)
   end
 
   def set_admin
