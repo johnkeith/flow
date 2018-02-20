@@ -29,33 +29,25 @@ RSpec.describe Api::V1::AdminsController, type: :controller do
   describe 'POST #create' do
     context 'admin is created' do
       it 'returns successfully' do
-        post :create, params: {:admin => @admin, :account_id => Account.first.id}
+        post :create, params: FactoryBot.attributes_for(:admin, :account_id => Account.first.id)
         expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'admin creation is invalidated' do
+      it 'raises an ActiveRecord error' do
+        expect {
+          post :create, params: FactoryBot.attributes_for(:admin)
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
     end
   end
 
-  #   context 'admin creation is invalidated' do
-  #     it 'raises an ActiveRecord error' do
-  #       expect {
-  #         post :create, params: FactoryBot.attributes_for(:admin)
-  #       }.to raise_error(ActiveRecord::RecordInvalid)
-  #     end
-  #   end
-  # end
-  #
-  # describe 'PATCH #update' do
-  #   context 'when it is successfully updated' do
-  #     before(:each) do
-  #
-  #       put :update, :params => { id: @admin.id, admin: { name: "New Name" } }
-  #     end
-  #     it "renders the json representation for the updated admin" do
-  #       admin_response = JSON.parse(response.body, symbolize_names: true)
-  #       expect(admin_response[:name]).to eql "New Name"
-  #     end
-  #   end
-  # end
+  describe 'PATCH #update' do
+    it 'returns successfully' do
+      expect(response).to have_http_status(:ok)
+    end
+  end
 
 
 end
