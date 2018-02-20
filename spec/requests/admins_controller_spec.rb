@@ -29,18 +29,24 @@ RSpec.describe Api::V1::AdminsController, type: :controller do
   describe 'POST #create' do
     context 'admin is created' do
       it 'returns successfully' do
-        post :create, params: FactoryBot.attributes_for(:admin, :account_id => Account.first.id)
+        @valid_admin = FactoryBot.build(:admin)
+        post :create, params:
+          { admin:
+            { name: @valid_admin.name, account_id: @valid_admin.account_id } },
+            format: :json
         expect(response).to have_http_status(:ok)
       end
     end
 
-    context 'admin creation is invalidated' do
-      it 'raises an ActiveRecord error' do
-        expect {
-          post :create, params: FactoryBot.attributes_for(:admin)
-        }.to raise_error(ActiveRecord::RecordInvalid)
-      end
-    end
+     context 'admin creation is invalidated' do
+       it 'raises an ActiveRecord error' do
+         @invalid_admin = FactoryBot.build(:admin, :invalid)
+         expect {
+         post :create, params:
+           { name: @invalid_admin.name, account_id: @invalid_admin.account_id },
+           format: :json }.to raise_error(ActionController::ParameterMissing)
+       end
+     end
   end
 
   describe 'PATCH #update' do
