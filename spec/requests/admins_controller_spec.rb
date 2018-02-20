@@ -40,7 +40,7 @@ RSpec.describe Api::V1::AdminsController, type: :controller do
 
      context 'admin creation is invalidated' do
        it 'raises an ActiveRecord error' do
-         @invalid_admin = FactoryBot.build(:admin, :invalid)
+         @invalid_admin = FactoryBot.build(:admin)
          expect {
          post :create, params:
            { name: @invalid_admin.name, account_id: @invalid_admin.account_id },
@@ -50,9 +50,10 @@ RSpec.describe Api::V1::AdminsController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    it 'returns successfully' do
-      expect(response).to have_http_status(:ok)
-    end
+    patch :update, params:
+      { id: @admin.id, admin:
+        { name: 'changed by update'} }, format: :json
+    it { should respond_with 200 }
   end
 
 
