@@ -40,6 +40,10 @@ module Authentication
       def initialize(msg='Unauthroized request')
         super
       end
+
+      def to_json(_)
+        { message: message }.to_json
+      end
     end
   end
 end
