@@ -1,3 +1,11 @@
+require 'faker'
+
+Account.create(id: 100, name: Faker::Name.name)
+
+5.times do
+  Admin.create(name: Faker::Name.name, account_id: 100)
+end
+
 def run!
   ActiveRecord::Base.transaction do
     account = create_account
@@ -22,3 +30,4 @@ def create_admins(account)
 end
 
 run!
+
