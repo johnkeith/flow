@@ -1,5 +1,5 @@
 class Api::V1::AdminsController < ApplicationController
-  before_action :set_admin, only: [:show, :uptdate, :destroy]
+  before_action :set_admin, only: [:show, :update, :destroy]
   protect_from_forgery with: :null_session
 
   def index
@@ -47,5 +47,4 @@ class Api::V1::AdminsController < ApplicationController
   def set_admin
     @admin = Admin.find(params[:id])
   end
-
 end
