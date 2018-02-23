@@ -7,6 +7,8 @@ RSpec.describe Api::V1::AdminsController, type: :controller do
   before do
     account
     admin
+
+    authenticate(admin)
   end
 
   context 'GET #index' do

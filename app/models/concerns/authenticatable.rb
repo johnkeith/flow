@@ -4,13 +4,7 @@ module Authenticatable
   SECRET = Rails.application.secrets.auth_secret_key
   
   def self.decode(token)
-    result = JWT.decode(token, SECRET, true, { algorithm: ALGORITHM })
-    
-    unless result.first['user_type'].eql?(user_type)
-      raise Errors::UserTypeError
-    end
-    
-    result
+    JWT.decode(token, SECRET, true, { algorithm: ALGORITHM })
   end
 
   def encode
@@ -29,13 +23,5 @@ module Authenticatable
 
   def expiration
     (Time.now + EXPIRATION).to_i
-  end
-
-  module Errors
-    class UserTypeError < StandardError
-      def initialize(msg='Token user type mismatch')
-        super
-      end
-    end
   end
 end
