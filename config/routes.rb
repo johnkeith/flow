@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
   root 'application#index'
-
+  
   namespace :api do
     post 'auth/create', to: 'authentication#create'
-  end
 
+    namespace :v1 do
+      resources :admins
+    end
+  end
 end
