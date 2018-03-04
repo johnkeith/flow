@@ -43,19 +43,24 @@ RSpec.describe Api::V1::AdminsController, type: :controller do
       post :create, params: {
         admin: {
           name: 'Bill Murray',
-          account_id: account.id
+          account_id: account.id,
+          password: 'Asdf123!',
+          password_confirmation: 'Asdf123!',
+          email: 'bill@example.com'
         }
       }, format: :json
 
       expect(response).to have_http_status(:ok)
     end
 
-    it 'raises an ActiveRecord error when invalid' do
-      expect { post :create, params: {
+    it 'return unprocessable if invalid' do
+      post :create, params: {
         admin: {
           account_id: account.id
         }
-      }, format: :json }.to raise_error ActiveRecord::NotNullViolation
+      }, format: :json
+
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 
