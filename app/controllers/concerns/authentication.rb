@@ -9,9 +9,19 @@ module Authentication
     admin_from_token if auth_token_present?      
   end
 
+  def current_account_id
+    current_user.account_id if current_user.present?
+  end
+
+  def authorize_resource(resource)
+    unless request_authorized_for_resource?(resource)
+      render json: Errors::UnauthorizedError, status: 401
+    end
+  end
+
   private
 
-  def auth_token_present?
+  def auth_token_present? 
     request
       .env
       .fetch("HTTP_AUTHORIZATION", "")
@@ -22,9 +32,13 @@ module Authentication
   end
 
   def admin_from_token
-    decoded = Authenticatable.decode(token)
+    if @_admin_from_token
+      @_admin_from_token
+    else
+      decoded = Authenticatable.decode(token)
     
-    Admin.where(id: decoded.first['user_id']).first
+      @_admin_from_token = Admin.where(id: decoded.first['user_id']).first
+    end
   end
 
   def token
@@ -33,6 +47,11 @@ module Authentication
       .scan(/Bearer (.*)$/)
       .flatten
       .last
+  end
+
+  def request_authorized_for_resource?(resource)
+    resource.account_id.present? &&
+    resource.account_id.eql?(current_account_id)
   end
 
   module Errors
