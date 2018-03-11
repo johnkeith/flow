@@ -4,7 +4,7 @@ RSpec.describe Api::V1::GraphController, type: :controller do
   let(:account) { FactoryBot.create(:account) }
   let(:admin) { FactoryBot.create(:admin, account: account) }
   let(:admin_two) { FactoryBot.create(:admin, account: account) }
-  let(:accounts_graph) {
+  let(:admins_graph) {
     {
       account: {
         only: [:id],
@@ -19,14 +19,6 @@ RSpec.describe Api::V1::GraphController, type: :controller do
     }
   }
 
-  let(:admins_graph) {
-    {
-      admin: {
-        account: {}
-      }
-    }
-  }
-
   before do
     account
     admin
@@ -37,17 +29,18 @@ RSpec.describe Api::V1::GraphController, type: :controller do
 
   context '#index' do
     it 'should return successfully with a valid graph' do
-      get :index, params: { g: accounts_graph.to_json, format: :json }
+      get :index, params: { m: 'admin', g: admins_graph.to_json, format: :json }
 
       json = JSON.parse(response.body)
-      expect(json.first.keys.size).to eq(3)
+      expect(json.length).to eq(2)
+      expect(json.first['account'].keys.length).to eq(3)
     end
 
     it 'should accept page and per headers' do
       request.headers['HTTP_PAGE'] = 2
       request.headers['HTTP_PER_PAGE'] = 1
 
-      get :index, params: { g: admins_graph.to_json, format: :json }
+      get :index, params: { m: 'admin', g: admins_graph.to_json, format: :json }
 
       json = JSON.parse(response.body)
       expect(json.length).to eq(1)
@@ -56,7 +49,7 @@ RSpec.describe Api::V1::GraphController, type: :controller do
 
   context '#show' do
     it 'should return successfully with a valid graph and id' do
-      get :show, params: { id: admin.id, g: admins_graph.to_json, format: :json }
+      get :show, params: { id: admin.id, m: 'admin', g: admins_graph.to_json, format: :json }
 
       json = JSON.parse(response.body)
       expect(json['id']).to eq(admin.id)

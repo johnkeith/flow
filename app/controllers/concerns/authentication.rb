@@ -1,8 +1,6 @@
 module Authentication
   def authenticate_user
-    unless current_user.present?
-      render json: Errors::UnauthorizedError, status: 401 
-    end
+    render_unauthorized unless current_user.present?       
   end
 
   def current_user
@@ -14,9 +12,7 @@ module Authentication
   end
 
   def authorize_resource(resource)
-    unless request_authorized_for_resource?(resource)
-      render json: Errors::UnauthorizedError, status: 401
-    end
+    render_unauthorized unless request_authorized_for_resource?(resource)
   end
 
   private
@@ -50,8 +46,16 @@ module Authentication
   end
 
   def request_authorized_for_resource?(resource)
-    resource.account_id.present? &&
-    resource.account_id.eql?(current_account_id)
+    if resource.is_a?(Account)
+      resource.id.eql?(current_account_id)
+    else
+      resource.account_id.present? &&
+      resource.account_id.eql?(current_account_id)
+    end
+  end
+
+  def render_unauthorized
+    render json: Errors::UnauthorizedError, status: 401
   end
 
   module Errors

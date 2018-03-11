@@ -9,8 +9,7 @@ class Api::AuthenticationController < Api::ApplicationController
       
       render json: { token: token }
     else
-      render json: Authentication::Errors::UnauthorizedError.new,
-        status: :unauthorized
+      render_unauthorized
     end
   end
 
