@@ -57,4 +57,52 @@ RSpec.describe Api::V1::GraphController, type: :controller do
       expect(json['account']).to be_present
     end
   end
+
+  context '#create' do
+    it 'should return unsuccessfully with invalid params' do
+      post :create, params: { 
+        m: 'admin',
+        admin: {
+          name: 'Joe',
+        }
+      }
+
+      json = JSON.parse(response.body)
+      expect(json['id']).not_to be_present
+      expect(json['errors']).to be_present
+    end
+    
+    it 'should return successfully with valid model and params' do 
+      post :create, params: { 
+        m: 'admin',
+        admin: {
+          name: 'Joe',
+          email: 'joe@example.com',
+          password: 'Asdf123!',
+          password_confirmation: 'Asdf123!'
+        }
+      }
+
+      json = JSON.parse(response.body)
+      expect(json['id']).to be_present
+      expect(json['account_id']).to eq(admin.account_id)
+    end
+  end
+
+  context '#update' do
+    it 'should return successfully with valid model and params' do 
+      post :update, params: { 
+        m: 'admin',
+        id: admin.id,
+        admin: {
+          name: 'NewJoe'
+        }
+      }
+
+      json = JSON.parse(response.body)
+      expect(json['id']).to be_present
+      expect(json['name']).to eq('NewJoe')
+      expect(json['name']).not_to eq(admin.name)
+    end
+  end
 end

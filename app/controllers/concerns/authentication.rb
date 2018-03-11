@@ -11,8 +11,17 @@ module Authentication
     current_user.account_id if current_user.present?
   end
 
-  def authorize_resource(resource)
-    render_unauthorized unless request_authorized_for_resource?(resource)
+  def request_authorized_for_resource?(resource)
+    if resource.is_a?(Account)
+      resource.id.eql?(current_account_id)
+    else
+      resource.account_id.present? &&
+      resource.account_id.eql?(current_account_id)
+    end
+  end
+
+  def render_unauthorized
+    render json: Errors::UnauthorizedError, status: 401
   end
 
   private
@@ -43,19 +52,6 @@ module Authentication
       .scan(/Bearer (.*)$/)
       .flatten
       .last
-  end
-
-  def request_authorized_for_resource?(resource)
-    if resource.is_a?(Account)
-      resource.id.eql?(current_account_id)
-    else
-      resource.account_id.present? &&
-      resource.account_id.eql?(current_account_id)
-    end
-  end
-
-  def render_unauthorized
-    render json: Errors::UnauthorizedError, status: 401
   end
 
   module Errors

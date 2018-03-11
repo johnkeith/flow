@@ -19,7 +19,9 @@ class Api::V1::GraphController < ApplicationController
     result = @model.includes(@includes) # optimize query
     result = result.find(params[:id]) # fetch record
     
-    authorize_resource(result) # authorization
+    unless request_authorized_for_resource?(result) # authorization
+      render_unauthorized and return
+    end
 
     render json: result.as_json(@as_json)
   end
@@ -33,16 +35,37 @@ class Api::V1::GraphController < ApplicationController
     if result.save
       render json: result
     else
-      render json: result.errors, status: 400
+      render json: { errors: result.errors }, status: 400
     end
   end
 
   def update
     # As with creates, nested updates will not be allowed.
+    result = @model.find(params[:id])
+    
+    unless request_authorized_for_resource?(result) # authorization
+      render_unauthorized and return
+    end
+
+    if result.update(permitted_params_for_model)
+      render json: result
+    else
+      render json: { errors: result.errors }, status: 400
+    end
   end
   
   def destroy
-    
+    result = @model.find(params[:id])
+
+    unless request_authorized_for_resource?(result) # authorization
+      render_unauthorized and return
+    end
+
+    if result.destroy
+      head :no_content
+    else
+      render json: { errors: result.errors }, status: 400
+    end
   end
 
   private
@@ -121,6 +144,6 @@ class Api::V1::GraphController < ApplicationController
   end
 
   def permitted_params_for_model
-    params.require(@model.to_sym).permit(@model.class.mutable_fields)
+    params.require(@model.name.downcase.to_sym).permit(@model.mutable_fields)
   end
 end
