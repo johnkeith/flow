@@ -21,7 +21,7 @@ module Authentication
   end
 
   def render_unauthorized
-    render json: Errors::UnauthorizedError, status: 401
+    render json: { error: 'Unauthroized request' }, status: 401
   end
 
   private
@@ -52,17 +52,5 @@ module Authentication
       .scan(/Bearer (.*)$/)
       .flatten
       .last
-  end
-
-  module Errors
-    class UnauthorizedError < StandardError
-      def initialize(msg='Unauthroized request')
-        super
-      end
-
-      def to_json(_)
-        { message: message }.to_json
-      end
-    end
   end
 end

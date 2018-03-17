@@ -18,6 +18,8 @@ RSpec.describe Api::V1::GraphController, type: :controller do
       }
     }
   }
+  let(:other_account) { FactoryBot.create(:account) }
+  let(:other_admin) { FactoryBot.create(:admin, account: other_account) }
 
   before do
     account
@@ -28,6 +30,15 @@ RSpec.describe Api::V1::GraphController, type: :controller do
   end
 
   context '#index' do
+    it 'should not return data from other account' do
+      other_admin
+      get :index, params: { m: 'admin', g: admins_graph.to_json, format: :json }
+
+      json = JSON.parse(response.body)
+      expect(json.length).to eq(2)
+      expect(json.find { |a| a['id'].eql?(other_admin.id)}).not_to be_present
+    end
+
     it 'should return successfully with a valid graph' do
       get :index, params: { m: 'admin', g: admins_graph.to_json, format: :json }
 
@@ -48,6 +59,15 @@ RSpec.describe Api::V1::GraphController, type: :controller do
   end
 
   context '#show' do
+    it 'should return unauthorized when trying to view another accounts records' do
+      other_admin
+      get :show, params: { id: other_admin.id, m: 'admin', g: admins_graph.to_json, format: :json }
+      
+      json = JSON.parse(response.body)
+      expect(json['error']).to be_present
+      expect(response).to have_http_status(:unauthorized)
+    end
+
     it 'should return successfully with a valid graph and id' do
       get :show, params: { id: admin.id, m: 'admin', g: admins_graph.to_json, format: :json }
 
@@ -90,6 +110,21 @@ RSpec.describe Api::V1::GraphController, type: :controller do
   end
 
   context '#update' do
+    it 'should return unauthorized when trying to edit another accounts records' do
+      other_admin
+      post :update, params: { 
+        m: 'admin',
+        id: other_admin.id,
+        admin: {
+          name: 'NewJoe'
+        }
+      }
+
+      json = JSON.parse(response.body)
+      expect(json['error']).to be_present
+      expect(response).to have_http_status(:unauthorized)
+    end
+    
     it 'should return successfully with valid model and params' do 
       post :update, params: { 
         m: 'admin',
@@ -103,6 +138,29 @@ RSpec.describe Api::V1::GraphController, type: :controller do
       expect(json['id']).to be_present
       expect(json['name']).to eq('NewJoe')
       expect(json['name']).not_to eq(admin.name)
+    end
+  end
+
+  context '#destroy' do
+    it 'should return unauthorized when trying to destroy another accounts records' do
+      other_admin
+      post :destroy, params: { 
+        m: 'admin',
+        id: other_admin.id
+      }
+
+      json = JSON.parse(response.body)
+      expect(json['error']).to be_present
+      expect(response).to have_http_status(:unauthorized)
+    end
+    
+    it 'should return successfully with valid model and params' do 
+      post :destroy, params: { 
+        m: 'admin',
+        id: admin.id
+      }
+
+      expect(response).to have_http_status(204)
     end
   end
 end
