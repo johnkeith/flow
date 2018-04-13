@@ -9,19 +9,22 @@ const Authenticated = () => (
 )
 
 const Sidebar = () => (
-  <aside className="menu column is-one-third">
-    <ul className="menu-list">
-      <li>
-        <NavLink to="/surveys">Surveys</NavLink>
-      </li>
-      <li>
-        <NavLink to="/teams">Teams</NavLink>
-      </li>
-      <li>
-        <NavLink to="/team_members">Team Members</NavLink>
-      </li>
-    </ul>
-  </aside>
+  <div className="column is-one-fifth">
+    <h1 class="title">Flow</h1>
+    <aside className="menu">
+      <ul className="menu-list">
+        <li>
+          <NavLink to="/surveys">Surveys</NavLink>
+        </li>
+        <li>
+          <NavLink to="/teams">Teams</NavLink>
+        </li>
+        <li>
+          <NavLink to="/team_members">Team Members</NavLink>
+        </li>
+      </ul>
+    </aside>
+  </div>
 )
 
 const Main = () => (
