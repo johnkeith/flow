@@ -4,11 +4,12 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Hello from './components/_hello'
+// import Hello from './components/_hello'
+import FlowApp from './components/_FlowApp'
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <Hello name="React" />,
+    <FlowApp />,
     document.getElementById('app'),
   )
 })

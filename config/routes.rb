@@ -5,8 +5,9 @@ Rails.application.routes.draw do
     post 'auth/create', to: 'authentication#create'
 
     namespace :v1 do
-      resources :admins
       resources :graph
     end
   end
+
+  get "*path", to: "application#index"
 end
