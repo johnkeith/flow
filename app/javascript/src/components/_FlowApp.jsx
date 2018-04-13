@@ -27,32 +27,31 @@ class FlowApp extends React.Component {
     return (
       <Router>
         <Switch>
-          <Route
-            path="/"
-            component={Unauthenticated}
-            exact />
-          <PrivateRoute
-            isAuthenticated={this.state.isAuthenticated}
-            path="/surveys"
-            component={Authenticated} />
+          {
+            this.state.isLoading ?
+            <Route path="/" component={LoadingOverlay} /> : null
+          }
+          {
+            !this.state.isLoading && this.state.isAuthenticated ?
+            <Route path="/" component={Authenticated} /> : null
+          }
+          {
+            !this.state.isLoading && !this.state.isAuthenticated ?
+            <Route path="/" component={Unauthenticated} exact /> : null
+          }
         </Switch>
       </Router>
     )
   }
 }
 
-// if it is loading, just show loading
-// if it is loaded, then check authentication,
-  // if authenticated, then show surveys at home
-  // if unauthenticated, show unauthenticated view
-
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
-  <Route {...rest} render={ props => (
-    isAuthenticated ?
-    <Component {...props} />
-    :
-    <Redirect to={{ pathname: "/", state: { from: props.location }}} />
-  )} />
-)
+// const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
+//   <Route {...rest} render={ props => (
+//     isAuthenticated ?
+//     <Component {...props} />
+//     :
+//     <Redirect to={{ pathname: "/", state: { from: props.location }}} />
+//   )} />
+// )
 
 export default FlowApp

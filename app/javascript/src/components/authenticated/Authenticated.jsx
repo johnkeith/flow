@@ -26,8 +26,23 @@ const Sidebar = () => (
 
 const Main = () => (
   <div className="column">
-    Hello App.
+    <Route path="/" component={Surveys} exact />
+    <Route path="/surveys" component={Surveys} />
+    <Route path="/teams" component={Teams} />
+    <Route path="/team_members" component={TeamMembers} />
   </div>
+)
+
+const Surveys = () => (
+  <div>Hello Surveys</div>
+)
+
+const Teams = () => (
+  <div>Hello Teams</div>
+)
+
+const TeamMembers = () => (
+  <div>Hello Team Members</div>
 )
 
 export default Authenticated
