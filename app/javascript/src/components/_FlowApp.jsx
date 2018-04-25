@@ -20,7 +20,7 @@ class FlowApp extends React.Component {
   }
 
   determineAuthStatus() {
-    return true
+    return false
   }
 
   render() {

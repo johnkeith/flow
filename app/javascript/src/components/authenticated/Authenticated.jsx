@@ -9,9 +9,9 @@ const Authenticated = () => (
 )
 
 const Sidebar = () => (
-  <div className="column is-one-fifth">
-    <h1 class="title">Flow</h1>
-    <aside className="menu">
+  <aside className="column is-one-fifth aside">
+    <nav className="menu">
+      <p class="menu-label">Menu</p>
       <ul className="menu-list">
         <li>
           <NavLink to="/surveys">Surveys</NavLink>
@@ -23,8 +23,8 @@ const Sidebar = () => (
           <NavLink to="/team_members">Team Members</NavLink>
         </li>
       </ul>
-    </aside>
-  </div>
+    </nav>
+  </aside>
 )
 
 const Main = () => (
